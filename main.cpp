@@ -1,5 +1,5 @@
 // Project: WritingCode2
-// Author: Charley Bein
+// Authors: Charley Bein, Ben Tipton
 // Class: CS315
 // Last Update: 26-2-2018
 
@@ -19,6 +19,8 @@ void selectSort(int[]);
 
 void mergeSort(int[], int, int);
 void merge(int[], int, int, int);
+
+void swap(int[], int, int);
 
 
 int N = 10;
@@ -45,7 +47,7 @@ int main() {
 
     cout << endl;
 
-    quicksort(A, 0, N);
+    quicksort(A, 0, N - 1);
     cout << "Quicksort:\n";
     for(int i = 0; i < N; i++){
         cout<<A[i] << endl;
@@ -69,7 +71,7 @@ int main() {
 
     cout << endl;
 
-    mergeSort(D, 0, N);
+    mergeSort(D, 0, N - 1);
     cout << "Merge Sort:\n";
     for(int i = 0; i < N; i++) {
         cout << D[i] << endl;
@@ -81,7 +83,11 @@ int main() {
 
 
 
-
+void swap(int A[], int p, int r){
+    int temp = A[p];
+    A[p] = A[r];
+    A[r] = temp;
+}
 
 
 //***********Quicksort****************
@@ -97,18 +103,15 @@ int partition(int A[], int p, int r) {
     int x = A[r];
     int i = p - 1;
 
-    for (int j = p; j <= r - 1; j++) {
+    for (int j = p; j < r; j++) {
         if (A[j] <= x) {
             i = i + 1;
-            int temp = A[i];
-            A[i] = A[j];
-            A[j] = temp;
+            swap(A, i, j);
         }
 
     }
-    int temp = A[i + 1];
-    A[i + 1] = A[r];
-    A[r] = temp;
+
+    swap(A, i + 1, r);
 
     return i + 1;
 }
