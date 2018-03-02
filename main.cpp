@@ -7,7 +7,6 @@
 #include <iostream>
 #include <ctime>
 
-
 using namespace std;
 
 void quicksort (int[], int, int);
@@ -23,60 +22,104 @@ void merge(int[], int, int, int);
 void swap(int[], int, int);
 
 
-int N = 10;
+int N = 100000;
+int RUNS = 10;
+
+clock_t start, finish;
+double runTime;
 
 int main() {
+
+//    freopen("out.txt", "w", stdout);
 
     //Seed the random number generation based on current time
     srand(time(0));
 
-    int A[N];
-    int B[N];
-    int C[N];
-    int D[N];
+    int *A = new int[N];
+    int *B = new int[N];
+    int *C = new int[N];
+    int *D = new int[N];
 
-    cout << "Initial randomized array:\n";
-    for(int i = 0; i < N; i++){
-        A[i] = (rand() % 50) + 1;
-        B[i] = A[i];
-        C[i] = A[i];
-        D[i] = A[i];
+    float qAvg, iAvg, sAvg, mAvg;
 
-        cout << A[i] << endl;
+    qAvg = 0;
+    iAvg = 0;
+    sAvg = 0;
+    mAvg = 0;    
+
+    for(int z = 0; z < RUNS; z++) {
+
+//    cout << "Initial randomized array:\n";
+        for (int i = 0; i < N; i++) {
+            A[i] = (rand() % N) + 1;
+            B[i] = A[i];
+            C[i] = A[i];
+            D[i] = A[i];
+
+//        cout << A[i] << endl;
+        }
+
+        //cout << endl;
+
+        start = clock();
+        quicksort(A, 0, N - 1);
+        finish = clock();
+        runTime = (double(finish) - double(start)) / CLOCKS_PER_SEC;
+        qAvg =+ runTime;
+//        cout << "Quicksort: " << runTime << " s";
+//    for(int i = 0; i < N; i++){
+//        cout<<A[i] << endl;
+//    }
+
+//        cout << endl;
+
+        start = clock();
+        insertSort(B);
+        finish = clock();
+        runTime = (double(finish) - double(start)) / CLOCKS_PER_SEC;
+        iAvg += runTime;
+//        cout << "Insert Sort: " << runTime << " s";
+//    for(int i = 0; i < N; i++){
+//        cout << B[i] << endl;
+//    }
+
+//        cout << endl;
+
+        start = clock();
+        selectSort(C);
+        finish = clock();
+        runTime = (double(finish) - double(start)) / CLOCKS_PER_SEC;
+        sAvg += runTime;
+//        cout << "Selection Sort: " << runTime << "s";
+//    for(int i = 0; i < N; i++){
+//        cout << C[i] << endl;
+//    }
+
+//        cout << endl;
+
+        start = clock();
+        mergeSort(D, 0, N - 1);
+        finish = clock();
+        runTime = (double(finish) - double(start)) / CLOCKS_PER_SEC;
+        mAvg += runTime;
+//        cout << "Merge Sort: " << runTime << "s";
+//    for(int i = 0; i < N; i++) {
+//        cout << D[i] << endl;
+//    }
+
+//        cout << endl;
+
     }
 
-    cout << endl;
+    cout << "Quicksort Avg: " << qAvg/RUNS << " s\n";
+    cout << "Insertion Sort Avg: " << iAvg / RUNS << " s\n";
+    cout << "Selection Sort Avg: " << sAvg / RUNS << " s\n";
+    cout << "Merge Sort Avg: " << mAvg / RUNS << " s\n";
 
-    quicksort(A, 0, N - 1);
-    cout << "Quicksort:\n";
-    for(int i = 0; i < N; i++){
-        cout<<A[i] << endl;
-    }
-
-    cout << endl;
-
-    insertSort(B);
-    cout << "Insert Sort:\n";
-    for(int i = 0; i < N; i++){
-        cout << B[i] << endl;
-    }
-
-    cout << endl;
-
-    selectSort(C);
-    cout << "Selection Sort:\n";
-    for(int i = 0; i < N; i++){
-        cout << C[i] << endl;
-    }
-
-    cout << endl;
-
-    mergeSort(D, 0, N - 1);
-    cout << "Merge Sort:\n";
-    for(int i = 0; i < N; i++) {
-        cout << D[i] << endl;
-    }
-
+    delete [] A;
+    delete [] B;
+    delete [] C;
+    delete [] D;
 
     return 0;
 }
